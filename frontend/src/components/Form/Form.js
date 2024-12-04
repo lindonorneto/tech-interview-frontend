@@ -1,13 +1,13 @@
 // Form.js
 
-import React, { useEffect } from 'react';
-import { Preferences, Features, RecommendationType } from './Fields';
-import { SubmitButton } from './SubmitButton';
-import useProducts from '../../hooks/useProducts';
+import React from 'react';
 import useForm from '../../hooks/useForm';
+import useProducts from '../../hooks/useProducts';
 import useRecommendations from '../../hooks/useRecommendations';
+import { Features, Preferences, RecommendationType } from './Fields';
+import { SubmitButton } from './SubmitButton';
 
-function Form() {
+function Form({ setRecommendations }) {
   const { preferences, features, products } = useProducts();
   const { formData, handleChange } = useForm({
     selectedPreferences: [],
@@ -15,15 +15,13 @@ function Form() {
     selectedRecommendationType: '',
   });
 
-  const { getRecommendations, recommendations } = useRecommendations(products);
+  const { getRecommendations } = useRecommendations(products);
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    const dataRecommendations = getRecommendations(formData);
+    setRecommendations([]);
 
-    /**
-     * Defina aqui a lógica para atualizar as recomendações e passar para a lista de recomendações
-     */
+    e.preventDefault();
+    setRecommendations(getRecommendations(formData));
   };
 
   return (
