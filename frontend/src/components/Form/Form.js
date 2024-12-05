@@ -1,6 +1,6 @@
 // Form.js
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import useForm from '../../hooks/useForm';
 import useProducts from '../../hooks/useProducts';
 import useRecommendations from '../../hooks/useRecommendations';
@@ -24,23 +24,35 @@ function Form({ setRecommendations }) {
     setRecommendations(getRecommendations(formData));
   };
 
-  return (
-    <form
-      className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md"
-      onSubmit={handleSubmit}
-    >
+  const renderPreferences = useMemo(() => {
+    return (
       <Preferences
         preferences={preferences}
         onPreferenceChange={(selected) =>
           handleChange('selectedPreferences', selected)
         }
       />
+    );
+  }, [preferences]);
+
+  const renderFeatures = useMemo(() => {
+    return (
       <Features
         features={features}
         onFeatureChange={(selected) =>
           handleChange('selectedFeatures', selected)
         }
       />
+    );
+  }, [features]);
+
+  return (
+    <form
+      className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md"
+      onSubmit={handleSubmit}
+    >
+      {renderPreferences}
+      {renderFeatures}
       <RecommendationType
         onRecommendationTypeChange={(selected) =>
           handleChange('selectedRecommendationType', selected)
