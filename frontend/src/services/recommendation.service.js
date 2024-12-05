@@ -14,6 +14,12 @@ const getRecommendations = (
   let featuresTotalOccurrences = 0;
   let highestTotal = 0;
 
+  if (
+    !formData?.selectedFeatures?.length &&
+    !formData?.selectedPreferences?.length
+  )
+    return [];
+
   const filteredProducts = products.reduce((accumulator, currentValue) => {
     if (formData?.selectedPreferences) {
       preferencesTotalOccurrences = getPreferencesTotalOccurrences(

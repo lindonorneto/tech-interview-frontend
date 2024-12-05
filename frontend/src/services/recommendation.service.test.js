@@ -117,6 +117,21 @@ describe('recommendationService', () => {
       expect(recommendations).toHaveLength(1);
       expect(recommendations[0].name).toBe('RD Conversas');
     });
+
+    test('Retorna vazio em caso de preferências e features vazias', () => {
+      const formData = {
+        selectedPreferences: [],
+        selectedFeatures: [],
+        selectedRecommendationType: SINGLE_PRODUCT,
+      };
+
+      const recommendations = recommendationService.getRecommendations(
+        formData,
+        mockProducts
+      );
+
+      expect(recommendations).toHaveLength(0);
+    });
   });
 
   describe('MultipleProducts', () => {
@@ -165,6 +180,21 @@ describe('recommendationService', () => {
         'RD Conversas',
         'RD Mentor AI',
       ]);
+    });
+
+    test('Retorna vazio em caso de preferências e features vazias', () => {
+      const formData = {
+        selectedPreferences: [],
+        selectedFeatures: [],
+        selectedRecommendationType: MULTIPLE_PRODUCTS,
+      };
+
+      const recommendations = recommendationService.getRecommendations(
+        formData,
+        mockProducts
+      );
+
+      expect(recommendations).toHaveLength(0);
     });
   });
 });
