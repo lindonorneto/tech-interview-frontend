@@ -14,7 +14,7 @@ const getRecommendations = (
   let featuresTotalOccurrences = 0;
   let highestTotal = 0;
 
-  const filterProducts = products.reduce((accumulator, currentValue) => {
+  const filteredProducts = products.reduce((accumulator, currentValue) => {
     if (formData?.selectedPreferences) {
       preferencesTotalOccurrences = getPreferencesTotalOccurrences(
         currentValue,
@@ -45,22 +45,20 @@ const getRecommendations = (
   }, []);
 
   if (isSingleProduct(formData.selectedRecommendationType)) {
-    if (areAllTotalsEquals(filterProducts, highestTotal)) {
-      return getLastItem(filterProducts);
-    }
+    return singleProduct(filteredProducts, highestTotal);
   }
 
-  return filterProducts;
+  return filteredProducts;
 };
 
 const getPreferencesTotalOccurrences = (product, selectedPreferences) =>
   product.preferences.reduce((acc, cur) => {
-    const find = selectedPreferences.find(
+    const findPreference = selectedPreferences.find(
       (selectedPreference) => selectedPreference === cur
     );
 
-    if (find) {
-      acc = +1;
+    if (findPreference) {
+      acc += 1;
     }
 
     return acc;
@@ -68,12 +66,12 @@ const getPreferencesTotalOccurrences = (product, selectedPreferences) =>
 
 const getFeaturesTotalOccurrences = (product, selectedFeatures) =>
   product.features.reduce((acc, cur) => {
-    const find = selectedFeatures.find(
+    const findFeature = selectedFeatures.find(
       (selectedFeature) => selectedFeature === cur
     );
 
-    if (find) {
-      acc = +1;
+    if (findFeature) {
+      acc += 1;
     }
 
     return acc;
@@ -87,10 +85,21 @@ const getHighestTotal = (result) =>
 const isSingleProduct = (selectedRecommendationType) =>
   selectedRecommendationType === SINGLE_PRODUCT;
 
-const areAllTotalsEquals = (products, highestTotal) =>
-  products.every((data) => {
-    return Object.values(data).includes(highestTotal);
-  });
+const singleProduct = (filteredProducts, highestTotal) => {
+  const itemsWithHighestTotal = filteredProducts.reduce((acc, cur) => {
+    if (cur.total === highestTotal) {
+      acc.push(cur);
+    }
+
+    return acc;
+  }, []);
+
+  if (itemsWithHighestTotal.length === 1) {
+    return itemsWithHighestTotal;
+  }
+
+  return getLastItem(itemsWithHighestTotal);
+};
 
 const getLastItem = (products) => [products[products.length - 1]];
 

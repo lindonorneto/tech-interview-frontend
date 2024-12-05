@@ -4,7 +4,7 @@ import { MULTIPLE_PRODUCTS, SINGLE_PRODUCT } from '../shared/constants';
 
 describe('recommendationService', () => {
   describe('SingleProduct', () => {
-    test('Retorna recomendação correta com base nas preferências selecionadas', () => {
+    test('Retorna recomendação correta com base na preferência e feature selecionada', () => {
       const formData = {
         selectedPreferences: ['Integração com chatbots'],
         selectedFeatures: ['Chat ao vivo e mensagens automatizadas'],
@@ -20,7 +20,50 @@ describe('recommendationService', () => {
       expect(recommendations[0].name).toBe('RD Conversas');
     });
 
-    test('Retorna recomendação correta com base nas features selecionadas', () => {
+    test('Retorna recomendação correta com base nas preferências e features selecionadas', () => {
+      let formData = {
+        selectedPreferences: [
+          'Integração fácil com ferramentas de e-mail',
+          'Automação de marketing',
+          'Testes A/B para otimização de campanhas',
+        ],
+        selectedFeatures: [
+          'Análise de dados para insights estratégicos',
+          'Recomendação de ações com base em padrões',
+          'Integração de funcionalidades preditivas nos produtos RD Station',
+        ],
+        selectedRecommendationType: SINGLE_PRODUCT,
+      };
+
+      let recommendations = recommendationService.getRecommendations(
+        formData,
+        mockProducts
+      );
+
+      expect(recommendations).toHaveLength(1);
+      expect(recommendations[0].name).toBe('RD Mentor AI');
+
+      formData = {
+        selectedPreferences: [
+          'Integração fácil com ferramentas de e-mail',
+          'Personalização de funis de vendas',
+          'Automação de marketing',
+          'Testes A/B para otimização de campanhas',
+        ],
+        selectedFeatures: ['Análise de dados para insights estratégicos'],
+        selectedRecommendationType: SINGLE_PRODUCT,
+      };
+
+      recommendations = recommendationService.getRecommendations(
+        formData,
+        mockProducts
+      );
+
+      expect(recommendations).toHaveLength(1);
+      expect(recommendations[0].name).toBe('RD Station Marketing');
+    });
+
+    test('Retorna recomendação correta com base na feature selecionada', () => {
       const formData = {
         selectedFeatures: ['Chat ao vivo e mensagens automatizadas'],
         selectedRecommendationType: SINGLE_PRODUCT,
