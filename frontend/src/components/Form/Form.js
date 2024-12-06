@@ -18,8 +18,6 @@ function Form({ setRecommendations }) {
   const { getRecommendations } = useRecommendations(products);
 
   const handleSubmit = (e) => {
-    setRecommendations([]);
-
     e.preventDefault();
     setRecommendations(getRecommendations(formData));
   };
