@@ -23,15 +23,15 @@ const getRecommendations = (
 
   const filteredProducts = products.reduce((accumulator, currentValue) => {
     if (formData?.selectedPreferences) {
-      preferencesTotalOccurrences = getPreferencesTotalOccurrences(
-        currentValue,
+      preferencesTotalOccurrences = getTotalOccurrences(
+        currentValue.preferences,
         formData?.selectedPreferences
       );
     }
 
     if (formData?.selectedFeatures) {
-      featuresTotalOccurrences = getFeaturesTotalOccurrences(
-        currentValue,
+      featuresTotalOccurrences = getTotalOccurrences(
+        currentValue.features,
         formData?.selectedFeatures
       );
     }
@@ -60,26 +60,11 @@ const getRecommendations = (
   return filteredProducts;
 };
 
-const getPreferencesTotalOccurrences = (product, selectedPreferences) =>
-  product.preferences.reduce((accumulator, currentValue) => {
-    const findPreference = selectedPreferences.find(
-      (selectedPreference) => selectedPreference === currentValue
-    );
+const getTotalOccurrences = (product, selectedItems) =>
+  product.reduce((accumulator, currentValue) => {
+    const findItem = selectedItems.find((item) => item === currentValue);
 
-    if (findPreference) {
-      accumulator += 1;
-    }
-
-    return accumulator;
-  }, 0);
-
-const getFeaturesTotalOccurrences = (product, selectedFeatures) =>
-  product.features.reduce((accumulator, currentValue) => {
-    const findFeature = selectedFeatures.find(
-      (selectedFeature) => selectedFeature === currentValue
-    );
-
-    if (findFeature) {
+    if (findItem) {
       accumulator += 1;
     }
 
