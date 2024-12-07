@@ -3,6 +3,8 @@ import App from './App';
 import * as useProductsHook from './hooks/useProducts';
 import mockProducts from './mocks/mockProducts';
 
+jest.mock('axios');
+
 describe('App', () => {
   test('Renderiza load', () => {
     jest.spyOn(useProductsHook, 'default').mockReturnValue({
