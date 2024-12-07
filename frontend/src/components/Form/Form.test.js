@@ -1,18 +1,23 @@
 /* eslint-disable testing-library/no-unnecessary-act */
 import { fireEvent, render, screen } from '@testing-library/react';
-import axios from 'axios';
 import { act } from 'react-dom/test-utils';
 import mockProducts from '../../mocks/mockProducts';
-import Form from './Form';
 import { REQUIRED_FIELD_ERROR } from '../../shared/constants';
-
-jest.mock('axios');
+import Form from './Form';
 
 const setRecommendations = jest.fn();
 
 const renderComponent = async () => {
   await act(async () => {
-    render(<Form setRecommendations={setRecommendations} />);
+    render(
+      <Form
+        setRecommendations={setRecommendations}
+        features={mockProducts[0].features}
+        preferences={mockProducts[0].preferences}
+        products={mockProducts}
+        setIsLoading={jest.fn()}
+      />
+    );
   });
 };
 
@@ -35,12 +40,6 @@ const clickSubmitButton = () => {
 };
 
 describe('Form', () => {
-  beforeEach(() => {
-    axios.get.mockImplementation(() =>
-      Promise.resolve({ data: [mockProducts[0]] })
-    );
-  });
-
   afterEach(() => {
     jest.clearAllMocks();
   });

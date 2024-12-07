@@ -5,6 +5,7 @@ const useProducts = () => {
   const [preferences, setPreferences] = useState([]);
   const [features, setFeatures] = useState([]);
   const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,13 +32,15 @@ const useProducts = () => {
         setFeatures(allFeatures);
       } catch (error) {
         console.error('Erro ao obter os produtos:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchData();
   }, []);
 
-  return { preferences, features, products };
+  return { preferences, features, products, isLoading };
 };
 
 export default useProducts;

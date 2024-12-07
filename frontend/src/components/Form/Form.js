@@ -4,14 +4,18 @@ import React from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useForm from '../../hooks/useForm';
-import useProducts from '../../hooks/useProducts';
 import useRecommendations from '../../hooks/useRecommendations';
+import { REQUIRED_FIELD_ERROR } from '../../shared/constants';
 import { Features, Preferences, RecommendationType } from './Fields';
 import { SubmitButton } from './SubmitButton';
-import { REQUIRED_FIELD_ERROR } from '../../shared/constants';
 
-function Form({ setRecommendations }) {
-  const { preferences, features, products } = useProducts();
+function Form({
+  setRecommendations,
+  preferences,
+  features,
+  products,
+  setIsLoading,
+}) {
   const { formData, handleChange } = useForm({
     selectedPreferences: [],
     selectedFeatures: [],
@@ -20,11 +24,13 @@ function Form({ setRecommendations }) {
   const { getRecommendations } = useRecommendations(products);
 
   const handleSubmit = (e) => {
+    setIsLoading(true);
     e.preventDefault();
 
     if (!isValidForm()) return;
 
     setRecommendations(getRecommendations(formData));
+    setIsLoading(false);
   };
 
   const isValidForm = () => {
