@@ -1,6 +1,7 @@
 import recommendationService from './recommendation.service';
 import mockProducts from '../mocks/mockProducts';
 import { MULTIPLE_PRODUCTS, SINGLE_PRODUCT } from '../shared/constants';
+import Recommendation from '../model/Recommendation';
 
 describe('recommendationService', () => {
   describe('SingleProduct', () => {
@@ -17,7 +18,9 @@ describe('recommendationService', () => {
       );
 
       expect(recommendations).toHaveLength(1);
-      expect(recommendations[0].name).toBe('RD Conversas');
+      expect(recommendations).toEqual([
+        new Recommendation({ id: 3, name: 'RD Conversas' }, 1, 1),
+      ]);
     });
 
     test('Retorna recomendação correta com base nas preferências e features selecionadas', () => {
@@ -41,7 +44,9 @@ describe('recommendationService', () => {
       );
 
       expect(recommendations).toHaveLength(1);
-      expect(recommendations[0].name).toBe('RD Mentor AI');
+      expect(recommendations).toEqual([
+        new Recommendation({ id: 4, name: 'RD Mentor AI' }, 0, 3),
+      ]);
 
       formData = {
         selectedPreferences: [
@@ -60,7 +65,9 @@ describe('recommendationService', () => {
       );
 
       expect(recommendations).toHaveLength(1);
-      expect(recommendations[0].name).toBe('RD Station Marketing');
+      expect(recommendations).toEqual([
+        new Recommendation({ id: 2, name: 'RD Station Marketing' }, 2, 0),
+      ]);
     });
 
     test('Retorna recomendação correta com base na feature selecionada', () => {
@@ -75,7 +82,9 @@ describe('recommendationService', () => {
       );
 
       expect(recommendations).toHaveLength(1);
-      expect(recommendations[0].name).toBe('RD Conversas');
+      expect(recommendations).toEqual([
+        new Recommendation({ id: 3, name: 'RD Conversas' }, 0, 1),
+      ]);
     });
 
     test('Retorna apenas um produto com mais de um produto de match', () => {
@@ -97,7 +106,9 @@ describe('recommendationService', () => {
       );
 
       expect(recommendations).toHaveLength(1);
-      expect(recommendations[0].name).toBe('RD Station Marketing');
+      expect(recommendations).toEqual([
+        new Recommendation({ id: 2, name: 'RD Station Marketing' }, 1, 1),
+      ]);
     });
 
     test('Retorna o último match em caso de empate', () => {
@@ -115,7 +126,9 @@ describe('recommendationService', () => {
       );
 
       expect(recommendations).toHaveLength(1);
-      expect(recommendations[0].name).toBe('RD Conversas');
+      expect(recommendations).toEqual([
+        new Recommendation({ id: 3, name: 'RD Conversas' }, 1, 0),
+      ]);
     });
 
     test('Retorna vazio em caso de preferências e features vazias', () => {
@@ -155,9 +168,9 @@ describe('recommendationService', () => {
       );
 
       expect(recommendations).toHaveLength(2);
-      expect(recommendations.map((product) => product.name)).toEqual([
-        'RD Station CRM',
-        'RD Station Marketing',
+      expect(recommendations.map((product) => product)).toEqual([
+        new Recommendation({ id: 1, name: 'RD Station CRM' }, 2, 1),
+        new Recommendation({ id: 2, name: 'RD Station Marketing' }, 1, 1),
       ]);
     });
 
@@ -176,9 +189,9 @@ describe('recommendationService', () => {
       );
 
       expect(recommendations).toHaveLength(2);
-      expect(recommendations.map((product) => product.name)).toEqual([
-        'RD Conversas',
-        'RD Mentor AI',
+      expect(recommendations.map((product) => product)).toEqual([
+        new Recommendation({ id: 3, name: 'RD Conversas' }, 0, 1),
+        new Recommendation({ id: 4, name: 'RD Mentor AI' }, 0, 1),
       ]);
     });
 
