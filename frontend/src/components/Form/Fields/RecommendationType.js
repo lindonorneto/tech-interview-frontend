@@ -1,5 +1,6 @@
 import React from 'react';
 import Checkbox from '../../shared/Checkbox';
+import { MULTIPLE_PRODUCTS, SINGLE_PRODUCT } from '../../../shared/constants';
 
 function RecommendationType({ onRecommendationTypeChange }) {
   return (
@@ -9,23 +10,23 @@ function RecommendationType({ onRecommendationTypeChange }) {
         <Checkbox
           type="radio"
           name="recommendationType"
-          value="SingleProduct"
-          onChange={() => onRecommendationTypeChange('SingleProduct')}
+          value={SINGLE_PRODUCT}
+          onChange={() => onRecommendationTypeChange(SINGLE_PRODUCT)}
           className="mr-2"
           data-testid="recommendation-single-product"
         />
-        <label htmlFor="SingleProduct" className="mr-4">
+        <label htmlFor={SINGLE_PRODUCT} className="mr-4">
           Produto Único
         </label>
         <Checkbox
           type="radio"
           name="recommendationType"
-          value="MultipleProducts"
-          onChange={() => onRecommendationTypeChange('MultipleProducts')}
+          value={MULTIPLE_PRODUCTS}
+          onChange={() => onRecommendationTypeChange(MULTIPLE_PRODUCTS)}
           className="mr-2"
           data-testid="recommendation-multiple-products"
         />
-        <label htmlFor="MultipleProducts">Múltiplos Produtos</label>
+        <label htmlFor={MULTIPLE_PRODUCTS}>Múltiplos Produtos</label>
       </div>
     </div>
   );
