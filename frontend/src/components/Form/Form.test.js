@@ -4,6 +4,7 @@ import { act } from 'react-dom/test-utils';
 import mockProducts from '../../mocks/mockProducts';
 import { REQUIRED_FIELD_ERROR } from '../../shared/constants';
 import Form from './Form';
+import Recommendation from '../../model/Recommendation';
 
 const setRecommendations = jest.fn();
 
@@ -67,11 +68,7 @@ describe('Form', () => {
     });
 
     expect(setRecommendations).toBeCalledWith([
-      {
-        id: 1,
-        name: 'RD Station CRM',
-        total: 2,
-      },
+      new Recommendation({ id: 1, name: 'RD Station CRM' }, 1, 1),
     ]);
   });
 

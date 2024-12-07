@@ -1,5 +1,6 @@
 // getRecommendations.js
 
+import Recommendation from '../model/Recommendation';
 import { SINGLE_PRODUCT } from '../shared/constants';
 
 const getRecommendations = (
@@ -36,11 +37,13 @@ const getRecommendations = (
     }
 
     if (preferencesTotalOccurrences >= 1 || featuresTotalOccurrences >= 1) {
-      accumulator.push({
-        id: currentValue.id,
-        name: currentValue.name,
-        total: preferencesTotalOccurrences + featuresTotalOccurrences,
-      });
+      accumulator.push(
+        new Recommendation(
+          currentValue,
+          preferencesTotalOccurrences,
+          featuresTotalOccurrences
+        )
+      );
     }
 
     if (isSingleProduct(formData.selectedRecommendationType)) {
@@ -58,47 +61,52 @@ const getRecommendations = (
 };
 
 const getPreferencesTotalOccurrences = (product, selectedPreferences) =>
-  product.preferences.reduce((acc, cur) => {
+  product.preferences.reduce((accumulator, currentValue) => {
     const findPreference = selectedPreferences.find(
-      (selectedPreference) => selectedPreference === cur
+      (selectedPreference) => selectedPreference === currentValue
     );
 
     if (findPreference) {
-      acc += 1;
+      accumulator += 1;
     }
 
-    return acc;
+    return accumulator;
   }, 0);
 
 const getFeaturesTotalOccurrences = (product, selectedFeatures) =>
-  product.features.reduce((acc, cur) => {
+  product.features.reduce((accumulator, currentValue) => {
     const findFeature = selectedFeatures.find(
-      (selectedFeature) => selectedFeature === cur
+      (selectedFeature) => selectedFeature === currentValue
     );
 
     if (findFeature) {
-      acc += 1;
+      accumulator += 1;
     }
 
-    return acc;
+    return accumulator;
   }, 0);
 
 const getHighestTotal = (result) =>
-  result.reduce((acc, cur) => {
-    return cur.total > acc ? cur.total : acc;
+  result.reduce((accumulator, currentValue) => {
+    return currentValue.totalOccurrences > accumulator
+      ? currentValue.totalOccurrences
+      : accumulator;
   }, 0);
 
 const isSingleProduct = (selectedRecommendationType) =>
   selectedRecommendationType === SINGLE_PRODUCT;
 
 const singleProduct = (filteredProducts, highestTotal) => {
-  const itemsWithHighestTotal = filteredProducts.reduce((acc, cur) => {
-    if (cur.total === highestTotal) {
-      acc.push(cur);
-    }
+  const itemsWithHighestTotal = filteredProducts.reduce(
+    (accumulator, currentValue) => {
+      if (currentValue.totalOccurrences === highestTotal) {
+        accumulator.push(currentValue);
+      }
 
-    return acc;
-  }, []);
+      return accumulator;
+    },
+    []
+  );
 
   if (itemsWithHighestTotal.length === 1) {
     return itemsWithHighestTotal;
