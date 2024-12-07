@@ -9,13 +9,7 @@ import { REQUIRED_FIELD_ERROR } from '../../shared/constants';
 import { Features, Preferences, RecommendationType } from './Fields';
 import { SubmitButton } from './SubmitButton';
 
-function Form({
-  setRecommendations,
-  preferences,
-  features,
-  products,
-  setIsLoading,
-}) {
+function Form({ setRecommendations, preferences, features, products }) {
   const { formData, handleChange } = useForm({
     selectedPreferences: [],
     selectedFeatures: [],
@@ -24,13 +18,11 @@ function Form({
   const { getRecommendations } = useRecommendations(products);
 
   const handleSubmit = (e) => {
-    setIsLoading(true);
     e.preventDefault();
 
     if (!isValidForm()) return;
 
     setRecommendations(getRecommendations(formData));
-    setIsLoading(false);
   };
 
   const isValidForm = () => {
